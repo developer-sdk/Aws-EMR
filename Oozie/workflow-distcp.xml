@@ -1,0 +1,34 @@
+<workflow-app xmlns="uri:oozie:workflow:0.5" name="oozie_distcp_action_sample">
+
+  <global>
+    <job-tracker>192.168.0.1:8032</job-tracker>
+    <name-node>hdfs://192.168.0.1:8020</name-node>
+    <configuration>
+      <property>
+        <name>oozie.launcher.mapred.job.queue.name</name>
+        <value>launcher</value>
+      </property>
+      <property>
+        <name>mapred.job.queue.name</name>
+        <value>distcp</value>
+      </property>
+    </configuration>
+  </global>
+
+  <start to="distcp" />
+    
+  <action name="distcp">
+    <distcp xmlns="uri:oozie:distcp-action:1.0">
+      <arg>-update</arg>
+      <arg>${sourceUrl}</arg>
+      <arg>${targetUrl}</arg>
+    </distcp>
+    <ok to="end" />
+    <error to="kill" />
+  </action>
+
+  <kill name="kill">
+    <message>Workflow failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+  </kill>
+  <end name="end" />
+</workflow-app>
