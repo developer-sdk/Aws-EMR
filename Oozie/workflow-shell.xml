@@ -1,0 +1,31 @@
+<workflow-app xmlns="uri:oozie:workflow:0.5" name="oozie_shell_action_sample">
+
+  <global>
+    <job-tracker>192.168.0.1:8032</job-tracker>
+    <name-node>hdfs://192.168.0.1:8020</name-node>
+    <configuration>
+      <property>
+        <name>oozie.launcher.mapred.job.queue.name</name>
+        <value>launcher</value>
+      </property>
+    </configuration>
+  </global>
+
+  <start to="distcp" />
+    
+  <action name="distcp">
+    <shell xmlns="uri:oozie:shell-action:0.1">
+      <file>run.sh</file>
+      <argument>${sourceUrl}</argument>
+      <argument>${targetUrl}</argument>
+      <file>run.sh</file>
+    </shell>
+    <ok to="end" />
+    <error to="kill" />
+  </action>
+
+  <kill name="kill">
+    <message>Workflow failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+  </kill>
+  <end name="end" />
+</workflow-app>
