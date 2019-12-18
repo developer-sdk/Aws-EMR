@@ -48,3 +48,11 @@ curl -s http://$(hostname -f):8088/ws/v1/cluster/appstatistics | jq
 curl -s http://$(hostname -f):8088/ws/v1/cluster/nodes | jq
 curl -s http://$(hostname -f):8088/ws/v1/cluster/nodes/[node_id] | jq
 ```
+
+
+# 리소스매니저의 설정정보
+REST API는 아니지만 다음의 위치로 호출하면 YARN의 설정값을 XML로 전달합니다. 
+
+```bash
+curl -s http://$(hostname -f):8088/conf 
+```
